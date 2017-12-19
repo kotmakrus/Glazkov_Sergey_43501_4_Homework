@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>TRPO</groupId>
-    <artifactId>f</artifactId>
+    <artifactId>jsonvalidate</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
 
@@ -44,7 +44,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>Jsonvalidator</mainClass>
+                                    <mainClass>Jsonvalidate</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
