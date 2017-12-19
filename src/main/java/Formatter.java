@@ -6,12 +6,8 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.stream.Collectors;
 
-/**
- * Class implements Server interface
- * <p>
- * Task of class is checking valid Json file or not
- */
-public class Jsonvalidate implements Server {
+
+public class Formatter implements Server {
 
     @NotNull
     private final HttpServer server;
@@ -24,12 +20,7 @@ public class Jsonvalidate implements Server {
     
     PrintWriter out = new PrintWriter(System.out);
 
-    /**
-     * Checking Json file
-     *
-     * @throws IOException because method create() of HttpServer can throw IOException
-     */
-    public Jsonvalidate() throws IOException {
+    public Formatter() throws IOException {  // check json files
         
         this.builder = new GsonBuilder().setPrettyPrinting().create();
         this.server = HttpServer.create(new InetSocketAddress(PORT), 0);
@@ -39,7 +30,7 @@ public class Jsonvalidate implements Server {
             InputStreamReader isr = new InputStreamReader(http.getRequestBody());
             final String jsonRequest = new BufferedReader(isr).lines().collect(Collectors.joining());
             
-            out.println("request:" + jsonRequest);
+            System.out.println("request:" + jsonRequest);
             out.flush();
             String jsonResponse;
             
@@ -57,9 +48,10 @@ public class Jsonvalidate implements Server {
                                 request_id
                         ));
             } finally {
-                
+                //noinspection UnusedAssignment
                 request_id++;
             }
+           
             
             out.println("response:" + jsonResponse);
             out.flush();
@@ -70,22 +62,20 @@ public class Jsonvalidate implements Server {
         });
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {  // start server and waiting for json files
         
-        Jsonvalidate jsonvalidate = new Jsonvalidate();
-        f.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(jsonvalidate::stop));
+        Formatter formatter = new Formatter();
+        formatter.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(formatter::stop));
     }
 
     @Override
     public void start() {
-        
-        this.server.start();  // bind server to http port, now we are listening
+        this.server.start(); // bind server to http port, start listening
     }
-
+    
     @Override
     public void stop() {
-        
-        this.server.stop(0);  // stop listen
+        this.server.stop(0); // stop listening
     }
 }
