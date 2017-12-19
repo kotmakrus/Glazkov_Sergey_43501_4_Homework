@@ -26,7 +26,7 @@ public class Formatter implements Server {
         this.server = HttpServer.create(new InetSocketAddress(PORT), 0);
         this.server.createContext(ROOT, http -> {
             
-            int request_id = 0;
+            int idForRequest = 0;
             InputStreamReader isr = new InputStreamReader(http.getRequestBody());
             final String jsonRequest = new BufferedReader(isr).lines().collect(Collectors.joining());
             
@@ -45,11 +45,11 @@ public class Formatter implements Server {
                                 errorSplittedString[1],
                                 "at " + errorSplittedString[2],
                                 jsonRequest,
-                                request_id
+                                idForRequest
                         ));
             } finally {
                 //noinspection UnusedAssignment
-                request_id++;
+                idForRequest ++;
             }
            
             
