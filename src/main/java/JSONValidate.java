@@ -1,6 +1,3 @@
-/**
- * Created by sergeyglazkov on 16.12.17.
- */
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpServer;
 import org.jetbrains.annotations.NotNull;
@@ -9,64 +6,86 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.util.stream.Collectors;
 
-public class GetJsonFormat implements ServerClean {
+/**
+ * Class implements Server interface
+ * <p>
+ * Task of class is checking valid Json file or not
+ */
+public class Jsonvalidate implements Server {
 
     @NotNull
     private final HttpServer server;
     @NotNull
-    private final Gson jsonBuilder;
+    private final Gson builder;
 
-    private static final String ROOT = "/";
     private static final int PORT = 80;
     private static final int CORRECT = 200;
+    private static final String ROOT = "/";
+    
+    PrintWriter out = new PrintWriter(System.out);
 
-    PrintWriter pr = new PrintWriter(new OutputStreamWriter(System.out));
-
-    public GetJsonFormat() throws IOException { // check json method
-
-        this.jsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+    /**
+     * Checking Json file
+     *
+     * @throws IOException because method create() of HttpServer can throw IOException
+     */
+    public Jsonvalidate() throws IOException {
+        
+        this.builder = new GsonBuilder().setPrettyPrinting().create();
         this.server = HttpServer.create(new InetSocketAddress(PORT), 0);
         this.server.createContext(ROOT, http -> {
-
+            
+            int request_id = 0;
             InputStreamReader isr = new InputStreamReader(http.getRequestBody());
-            String jsonRequest = new BufferedReader(isr).lines().collect(Collectors.joining());
-            pr.println("Request:" + jsonRequest);
-            pr.flush();
-
+            final String jsonRequest = new BufferedReader(isr).lines().collect(Collectors.joining());
+            
+            out.println("request:" + jsonRequest);
+            out.flush();
             String jsonResponse;
+            
             try {
-
                 Object object = builder.fromJson(jsonRequest, Object.class);
                 jsonResponse = builder.toJson(object);
             } catch (JsonSyntaxException e) {
-
-                JsonObject jsonError = new JsonObject();
-                jsonError.addProperty("message", e.getMessage());
-                jsonResponse = builder.toJson(jsonError);
+                String[] errorSplittedString = e.getMessage().split(".+: | at ");
+                jsonResponse = builder.toJson(
+                        new JsonError(
+                                e.hashCode(),
+                                errorSplittedString[1],
+                                "at " + errorSplittedString[2],
+                                jsonRequest,
+                                request_id
+                        ));
+            } finally {
+                
+                request_id++;
             }
-
-            pr.println("Response:" + jsonResponse);
-            pr.flush();
-
+            
+            out.println("response:" + jsonResponse);
+            out.flush();
+            
             http.sendResponseHeaders(CORRECT, jsonResponse.length());
             http.getResponseBody().write(jsonResponse.getBytes());
             http.close();
         });
     }
 
-    public static void main(String[] args) throws IOException { // start server
-        GetJsonFormat jsonFormat = new GetJsonFormat();
-        jsonFormat.start();
-        Runtime.getRuntime().addShutdownHook(new Thread(jsonFormat::stop));
+    public static void main(String[] args) throws IOException {
+        
+        Jsonvalidate jsonvalidate = new Jsonvalidate();
+        f.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(jsonvalidate::stop));
     }
 
     @Override
-    public void start() {   // binding to http port, now we are listening
-        this.server.start();
+    public void start() {
+        
+        this.server.start();  // bind server to http port, now we are listening
     }
 
     @Override
-    public void stop() {   // it's enough to listen
-        this.server.stop(0);
+    public void stop() {
+        
+        this.server.stop(0);  // stop listen
     }
 }
