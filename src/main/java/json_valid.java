@@ -9,7 +9,7 @@ import java.net.InetSocketAddress;
 /**
  * Class to implement server and validate json files
  */
-public class json_validate {
+public class json_valid {
 
     private static final int PORT = 80;     //We listen this port
     private static final int MISTAKE = 200;    //Reply code
