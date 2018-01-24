@@ -27,7 +27,7 @@ public class json_valid {
      * @throws IOException in case of something wrong with input/output operations
      */
 
-    public json_validate(HttpServer server) throws IOException {
+    public json_valid(HttpServer server) throws IOException {
 
         // We create GsonBuilder and configure it to output Json that fits in a page for pretty printing
         // Then we bind port with the server
@@ -106,7 +106,7 @@ public class json_valid {
         // create server
         final HttpServer server = HttpServer.create();
         // create object of class
-        json_validate json = new json_validate(server);
+        json_valid json = new json_valid(server);
         // launch server
         json.start(server);
     }
