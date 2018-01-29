@@ -2,14 +2,13 @@
 This code implements a simple programm for validation Json files
 
 # Usage:
-1) `docker build -t validator github.com/kotmakrus/Glazkov_Sergey_43501_4_Homework`
-2) `docker run -d --rm -p 80:80 validator`
-3) `curl -s --upload-file filename.json http://localhost`
+1) `docker build -t validation-service github.com/kotmakrus/Glazkov_Sergey_43501_4_Homework && docker run -d --rm -p 80:80 validation-service`
+2) `curl -s --upload-file filename.json http://localhost`
 
 # Usage for task2:
 1) `./gradlew docker`
 2) `docker run -d --rm -p 80:80 validator:0.1`
-3) `curl -s --upload-file filename.json http://localhost`
+3) `curl -s --upload-file (in)correct.json http://localhost`
 
 # Result:
 1) In case of all is good - you'll get your .jsonfile
