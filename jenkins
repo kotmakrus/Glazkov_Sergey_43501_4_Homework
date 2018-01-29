@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    
+    stages {
+        
+        stage('Step 1') {
+            steps {
+                sh 'git clone https://github.com/kotmakrus/Glazkov_Sergey_43501_4_Homework'
+                echo 'Step 1 doing ... by Glazkov S.'
+            }
+        }
+        
+        stage('Step 2') {
+            steps {
+                sh 'chmod +x gradlew'
+		            sh './gradlew docker'
+                echo 'Step 2 doing ... by Glazkov S.'
+            }
+        }
+        
+        stage('Step 3') {
+            steps {
+                echo 'Step 3 doing ... by Glazkov S.'
+                echo 'To validate file use: curl -s --upload-file filename.json http://localhost'
+            }
+        }
+    
+    }
+}
