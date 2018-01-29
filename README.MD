@@ -2,7 +2,7 @@
 This code implements a simple programm for validation Json files
 
 # Usage:
-1) `docker build -t validation-service github.com/kotmakrus/Glazkov_Sergey_43501_4_Homework && docker run -d --rm -p 80:80 validation-service`
+1) `docker build -t validation-service github.com/kotmakrus/Glazkov_Sergey_43501_4_Homework && docker run -d --rm -p 80:80 validation-service` 
 2) `curl -s --upload-file filename.json http://localhost`
 
 # Usage for task2:
