@@ -38,6 +38,7 @@ public class json_valid {
         server.createContext("/", httpExchange -> {
 
             int count = 0; // request id counting
+            String nameOfFile = httpExchange.getRequestURI().getPath(); // for name of file in response
 
             // BufferedReader for text reading from a character-input stream, read until we get EOF
             BufferedReader br = new BufferedReader(new InputStreamReader(httpExchange.getRequestBody()));
@@ -83,7 +84,7 @@ public class json_valid {
                 error.addProperty("errorCode", errorCode);
                 error.addProperty("errorMessage", errorMessage);
                 error.addProperty("errorPlace", errorPlace);
-                error.addProperty("resource", request);
+                error.addProperty("resource", nameOfFile);  // changed
                 error.addProperty("request-id", count);
                 response = gson.toJson(error);
             }
